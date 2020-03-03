@@ -1,12 +1,12 @@
-# 代理github 文档
+# 接入github
 
-支持文档内容直接来自github， 用户可以把自己公开的文档使用markdown 语法来编写。然后托管到github上。
+支持文档内容直接来自github， 用户可以把自己公开的文档使用markdown 语法来编写。然后托管到github上。目前只支持从github上读取内容。
 
-## github项目配置
+## github项目信息
 
 **请求PATH**
 
--  `gh-docs`
+-  `/gh-docs`
 
 **支持接口**
 
@@ -25,6 +25,7 @@
     "_id":"122134124242",
     "cid": "334339f3eedde444",
     "tid": "333343434343434",
+    "username": "jkrains",
     "project": "volley",
     "branch": "v1.0.2",
     "overview": "此版本，描述",
@@ -43,6 +44,7 @@
 | _id      | 是       | String   | 唯一标识，由服务器产生                                       |
 | cid      | 是       | String   | 文件                                                         |
 | tid      | 是       | String   | 分组id                                                       |
+| username | 是       | String   | 用户在github上的账户名称必填                                 |
 | project  | 是       | String   | 项目名称，对应在github的项目名称                             |
 | branch   | 是       | String   | 分支名称，一般携带版本号，对应在github的分支名称。           |
 | overview | 否       | String   | 概述，用户标注                                               |
@@ -51,4 +53,52 @@
 | hasToken | 是       | boolean  | 用户设置完token后，该字段表示用户是否已经设置过token了。     |
 
 **注意**
+
+如果用户未认证，及上述token未填写，则默认每小时最多可以请求60次。且只能访问公开的信息。
+
+如果用户填写了token, 并认证通过， 则每小时可以访问5000次。并且可以访问用户的私有资源。
+
+
+
+## 获取项目目录
+
+**请求PATH**
+
+- `/gh-data/content/:username/:project/:branch`
+
+**请求类型**
+
+- `get`
+
+**说明**
+
+如上PATH所示， `/gh-data/content`固定，为PATH的前缀， username为用户在github的用户名，project为项目名称， branch为用户的项目分支，一般表示版本号。
+
+**示例**
+
+```json
+/gh-data/content/jkrains/jks-cms-doc/v1
+```
+
+
+
+## 获取文件元数据
+
+**请求PATH**
+
+- `/gh-data/raw/:username/:project/:branch`
+
+**请求类型**
+
+- `get`
+
+**说明**
+
+如上PATH所示， `/gh-data/raw`固定，为PATH的前缀， username为用户在github的用户名，project为项目名称， branch为用户的项目分支，一般表示版本号。
+
+**示例**
+
+```json
+/gh-data/raw/jkrains/jks-cms-doc/v1
+```
 
